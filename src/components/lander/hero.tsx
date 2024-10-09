@@ -35,10 +35,19 @@ const HeroSection: React.FC = () => {
                             </div>
                         ))}
                     </div>
-                    <div className="flex justify-center">
+                    <div className="flex flex-col items-center justify-center gap-4">
                         <Button onClick={() => scrollToSection('pricing')} className="text-xl sm:text-2xl px-8 sm:px-10 py-4 sm:py-5">
                             Try now!
                         </Button>
+                        <a href="https://www.producthunt.com/posts/sticky-6e1e2b83-364b-402a-b191-5dab338d76e4?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-sticky&#0045;6e1e2b83&#0045;364b&#0045;402a&#0045;b191&#0045;5dab338d76e4" target="_blank">
+                            <img 
+                                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=495757&theme=light" 
+                                alt="Sticky - Ideas&#0032;that&#0032;Stick&#0044;&#0032;literally | Product Hunt" 
+                                style={{ width: '250px', height: '54px' }} 
+                                width="250" 
+                                height="54" 
+                            />
+                        </a>
                     </div>
                 </div>
             </section>
