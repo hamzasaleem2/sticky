@@ -1,11 +1,13 @@
 # sticky
 Ideas that Stick, literally
 
-![Sticky Logo](/sticky-logo.png)
+![Sticky Logo](https://github.com/hamzasaleem2/sticky/blob/main/public/sticky-logo.png)
 
 ## About Sticky
 
 Sticky is a digital sticky note application designed to help you organize your thoughts, ideas, and tasks in a visual and intuitive way. Organize thoughts, collaborate in real-time, and access your ideas from anywhere. Try it free today!
+
+![Board](https://github.com/hamzasaleem2/sticky/blob/main/public/board.png)
 
 ### Key Features:
 
