@@ -31,10 +31,12 @@ const BoardsList: React.FC = () => {
     const permanentlyDeleteBoard = useMutation(api.boards.permanentlyDeleteBoard);
     const userBoardsCount = useQuery(api.boards.getUserBoardsCount, {}) || 0;
     const userBoardsTrashCount = useQuery(api.boards.getUserBoardsTrashCount, {}) || 0;
+    const [newBoardId, setNewBoardId] = useState<Id<"boards"> | null>(null);
 
     const handleCreateBoard = useCallback(async () => {
         const newBoardName = `New Board`;
-        await createBoard({ name: newBoardName });
+        const newBoardId = await createBoard({ name: newBoardName });
+        return newBoardId;
     }, [createBoard]);
 
     const handleDeleteBoard = useCallback(async (boardId: Id<"boards">) => {
@@ -88,10 +90,13 @@ const BoardsList: React.FC = () => {
                             </span>
                         </div>
                         <div className="flex items-center space-x-4">
-                            <Button onClick={handleCreateBoard} size="sm" className="flex items-center">
-                                <Plus className="w-4 h-4 mr-2" />
-                                <span className="inline">New Board</span>
-                            </Button>
+                            <Button onClick={async () => {
+    const boardId = await handleCreateBoard();
+    setNewBoardId(boardId);
+}} size="sm" className="flex items-center">
+    <Plus className="w-4 h-4 mr-2" />
+    <span className="inline">New Board</span>
+</Button>
                             <UserButton />
                         </div>
                     </div>
@@ -160,57 +165,62 @@ const BoardsList: React.FC = () => {
                             ) : results.length > 0 ? (
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-4">
                                     {results?.map((board) => (
-                                        <div key={board._id} className="block">
-                                            <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
-                                                <div className="p-6">
-                                                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                                                        <input
-                                                            type="text"
-                                                            defaultValue={board.name}
-                                                            className="w-full bg-transparent border-b border-transparent hover:border-gray-300 dark:hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-md focus:p-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:p-2"
-                                                            onBlur={(e) => handleEditBoard(board._id, e.target.value)}
-                                                            onKeyDown={(e) => {
-                                                                if (e.key === 'Enter') {
-                                                                    e.currentTarget.blur();
-                                                                }
-                                                            }}
-                                                        />
-                                                    </h3>
-                                                    <p className="text-gray-500 dark:text-gray-400 mb-4 text-xs">
-                                                        Last modified: {formatLastModified(board.lastModified)}
-                                                    </p>
-                                                    <div className="flex justify-between items-center">
-                                                        <span className="text-sm text-gray-500 dark:text-gray-400">
-                                                            {board.notesCount === 1 ? '1 note' : `${board.notesCount || 0} notes`}
-                                                        </span>
-                                                        <div className="flex space-x-2">
-                                                            {showTrashed ? (
-                                                                <>
-                                                                    <Button size="sm" onClick={() => handleRestoreBoard(board._id)}>
-                                                                        <RefreshCw className="w-4 h-4" />
-                                                                    </Button>
-                                                                    <Button size="sm" onClick={() => handlePermanentlyDeleteBoard(board._id)} className="bg-red-500 hover:bg-red-600">
-                                                                        <Trash2 className="w-4 h-4" />
-                                                                    </Button>
-                                                                </>
-                                                            ) : (
-                                                                <>
-                                                                    <Link to={`/board/${board._id}`}>
-                                                                        <Button size="sm" onClick={() => { }}>
-                                                                            <Folder className="w-4 h-4" />
-                                                                        </Button>
-                                                                    </Link>
-                                                                    <Button size="sm" onClick={() => handleDeleteBoard(board._id)}>
-                                                                        <Trash2 className="w-4 h-4" />
-                                                                    </Button>
-                                                                </>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
+    <div key={board._id} className={`block ${board._id === newBoardId ? 'ring-2 ring-purple-500 ring-offset-2' : ''}`}>
+        <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+            <div className="p-6">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                    <input
+                        type="text"
+                        defaultValue={board.name}
+                        className="w-full bg-transparent border-b border-transparent hover:border-gray-300 dark:hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-md focus:p-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:p-2"
+                        onBlur={(e) => handleEditBoard(board._id, e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                e.currentTarget.blur();
+                            }
+                        }}
+                    />
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400 mb-4 text-xs">
+                    Last modified: {formatLastModified(board.lastModified)}
+                </p>
+                <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                        {board.notesCount === 1 ? '1 note' : `${board.notesCount || 0} notes`}
+                    </span>
+                    <div className="flex space-x-2">
+                        {showTrashed ? (
+                            <>
+                                <Button size="sm" onClick={() => handleRestoreBoard(board._id)}>
+                                    <RefreshCw className="w-4 h-4" />
+                                </Button>
+                                <Button size="sm" onClick={() => handlePermanentlyDeleteBoard(board._id)} className="bg-red-500 hover:bg-red-600">
+                                    <Trash2 className="w-4 h-4" />
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Link to={`/board/${board._id}`}>
+                                    <Button 
+                                        size="sm" 
+                                        className={`flex items-center ${board._id === newBoardId ? 'bg-purple-500 hover:bg-purple-600' : ''}`}
+                                        onClick={() => setNewBoardId(null)}
+                                    >
+                                        <Folder className="w-4 h-4 mr-1" />
+                                        Open
+                                    </Button>
+                                </Link>
+                                <Button size="sm" onClick={() => handleDeleteBoard(board._id)}>
+                                    <Trash2 className="w-4 h-4" />
+                                </Button>
+                            </>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+))}
                                 </div>
                             ) : (
                                 <EmptyState
