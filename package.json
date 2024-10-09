@@ -1,0 +1,70 @@
+{
+  "name": "sticky",
+  "private": false,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hamzasaleem2/sticky"
+  },
+  "keywords": [
+    "sticky-notes",
+    "collaboration",
+    "organization",
+    "react",
+    "typescript",
+    "convex.dev"
+  ],
+  "author": "Hamza Saleem",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hamzasaleem2/sticky/issues"
+  },
+  "homepage": "https://github.com/hamzasaleem2/sticky#readme",
+  "dependencies": {
+    "@clerk/clerk-react": "^5.11.0",
+    "@clerk/themes": "^2.1.35",
+    "@convex-dev/aggregate": "^0.1.13",
+    "@radix-ui/react-toast": "^1.2.2",
+    "@types/lodash.debounce": "^4.0.9",
+    "@types/react-lazy-load-image-component": "^1.6.4",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "convex": "^1.16.3",
+    "convex-helpers": "^0.1.59",
+    "lodash.debounce": "^4.0.8",
+    "lucide-react": "^0.447.0",
+    "next-themes": "^0.3.0",
+    "posthog-js": "^1.167.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-lazy-load-image-component": "^1.6.2",
+    "react-router-dom": "^6.26.2",
+    "tailwind-merge": "^2.5.2",
+    "use-image": "^1.1.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "@types/node": "^22.7.4",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/uuid": "^10.0.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.9.0",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "globals": "^15.9.0",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.0.1",
+    "vite": "^5.4.1"
+  }
+}
