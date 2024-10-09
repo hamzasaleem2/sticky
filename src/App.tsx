@@ -13,6 +13,7 @@ import AuthenticatedApp from './authenticated';
 import Signup from './auth/signup';
 import ErrorBoundary from './components/ErrorBoundary';
 import Onboarding from './authenticated/Onboarding';
+import OpenSourceSection from './components/lander/opensource';
 
 function App() {
   const { isLoaded } = useConvexAuth();
@@ -34,6 +35,7 @@ function App() {
                 <HeroSection />
                 <PricingSection />
                 <FAQSection />
+                <OpenSourceSection />
               </main>
               <Footer />
             </>
