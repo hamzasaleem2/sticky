@@ -6,7 +6,6 @@ import {
   Heading,
   Html,
   Img,
-  Link,
   Preview,
   Section,
   Text,
@@ -87,14 +86,6 @@ const paragraph = {
   lineHeight: "26px",
   marginBottom: "26px",
   color: "#333",
-};
-
-const featureList = {
-  fontSize: "18px",
-  lineHeight: "26px",
-  marginBottom: "26px",
-  color: "#333",
-  paddingLeft: "20px",
 };
 
 const btnContainer = {
