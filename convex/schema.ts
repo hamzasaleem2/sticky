@@ -61,5 +61,11 @@ export default defineSchema({
   supportRequest: defineTable({
     userId: v.id("users"),
     input: v.string()
-  })
+  }),
+
+  emailLogs: defineTable({
+    userId: v.id("users"),
+    type: v.string(),
+    sentAt: v.number(),
+  }).index("by_user_and_type", ["userId", "type"]),
 });

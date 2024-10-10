@@ -12,10 +12,12 @@
 
 import type * as boardSharing from "../boardSharing.js";
 import type * as boards from "../boards.js";
+import type * as emails from "../emails.js";
 import type * as notes from "../notes.js";
 import type * as presence from "../presence.js";
 import type * as support from "../support.js";
 import type * as users from "../users.js";
+import type * as welcomeEmail from "../welcomeEmail.js";
 
 import type {
   ApiFromModules,
@@ -33,10 +35,12 @@ import type {
 declare const fullApi: ApiFromModules<{
   boardSharing: typeof boardSharing;
   boards: typeof boards;
+  emails: typeof emails;
   notes: typeof notes;
   presence: typeof presence;
   support: typeof support;
   users: typeof users;
+  welcomeEmail: typeof welcomeEmail;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
 

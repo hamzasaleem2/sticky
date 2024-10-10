@@ -32,6 +32,7 @@
     "@clerk/themes": "^2.1.35",
     "@convex-dev/aggregate": "^0.1.13",
     "@radix-ui/react-toast": "^1.2.2",
+    "@react-email/components": "^0.0.25",
     "@types/lodash.debounce": "^4.0.9",
     "@types/react-lazy-load-image-component": "^1.6.4",
     "class-variance-authority": "^0.7.0",
@@ -46,6 +47,7 @@
     "react-dom": "^18.3.1",
     "react-lazy-load-image-component": "^1.6.2",
     "react-router-dom": "^6.26.2",
+    "resend": "^4.0.0",
     "tailwind-merge": "^2.5.2",
     "use-image": "^1.1.1"
   },

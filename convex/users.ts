@@ -1,4 +1,5 @@
-import { mutation, query } from "./_generated/server";
+import { internal } from "./_generated/api";
+import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 export const createOrUpdateUser = mutation({
@@ -27,12 +28,22 @@ export const createOrUpdateUser = mutation({
       return user._id;
     }
 
-    return await ctx.db.insert("users", {
+    const userId = await ctx.db.insert("users", {
       name: args.name,
       email: args.email,
       tokenIdentifier: args.tokenIdentifier,
       profileImageUrl: args.profileImageUrl,
     });
+
+     if (args.email) {
+      await ctx.scheduler.runAfter(0, internal.emails.sendWelcomeEmail, {
+        userId: userId,
+        email: args.email,
+        name: args.name
+      });
+    }
+
+    return userId;
   },
 });
 
@@ -73,6 +84,67 @@ export const storePlan = mutation({
     }
     else{
       return true;
+    }
+  },
+});
+
+export const existingLogforEmail = internalQuery({
+  args: {
+    userId: v.id("users")
+  },
+  handler: async(ctx,args)=>{
+    const existingLog = await ctx.db
+    .query("emailLogs")
+    .withIndex("by_user_and_type", (q) => 
+      q.eq("userId", args.userId).eq("type", "welcome")
+    )
+    .first();
+
+    if (existingLog) {
+      return true;
+    }
+    return false;
+  }
+})
+
+export const LogEmailSend = internalMutation({
+  args: {
+    userId: v.id("users"),
+    type: v.string(),
+  },
+  handler: async (ctx, args) => {
+    try{
+      const res = await ctx.db.insert("emailLogs", {
+        userId: args.userId,
+        type: args.type,
+        sentAt: Date.now()
+      });
+      return res;
+    }
+    catch(error){
+      return error;
+    }
+  }
+})
+
+export const backfillWelcomeEmails = internalMutation({
+  handler: async (ctx) => {
+    const users = await ctx.db.query("users").collect();
+    for (const user of users) {
+      const emailSent = await ctx.db
+        .query("emailLogs")
+        .withIndex("by_user_and_type", (q) => 
+          q.eq("userId", user._id).eq("type", "welcome")
+        )
+        .first();
+      
+      if (!emailSent && user.email) {
+        await ctx.scheduler.runAfter(0, internal.emails.sendWelcomeEmail, {
+          userId: user._id,
+          email: user.email,
+          name: user.name
+        });
+      }
     }
   },
 });
