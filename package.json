@@ -1,7 +1,7 @@
 {
   "name": "sticky",
   "private": false,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -30,15 +30,15 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.11.0",
     "@clerk/themes": "^2.1.35",
-    "@convex-dev/aggregate": "^0.1.13",
+    "@convex-dev/aggregate": "^0.1.14",
     "@radix-ui/react-toast": "^1.2.2",
     "@react-email/components": "^0.0.25",
     "@types/lodash.debounce": "^4.0.9",
     "@types/react-lazy-load-image-component": "^1.6.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "convex": "^1.16.3",
-    "convex-helpers": "^0.1.59",
+    "convex": "^1.16.5",
+    "convex-helpers": "^0.1.60",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.447.0",
     "next-themes": "^0.3.0",

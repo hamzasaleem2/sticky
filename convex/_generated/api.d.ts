@@ -62,19 +62,7 @@ export declare const components: {
         { k1?: any; k2?: any },
         { count: number; sum: number }
       >;
-      aggregateBetweenHandler: FunctionReference<
-        "query",
-        "internal",
-        { k1?: any; k2?: any },
-        { count: number; sum: number }
-      >;
       atNegativeOffset: FunctionReference<
-        "query",
-        "internal",
-        { k1?: any; k2?: any; offset: number },
-        { k: any; s: number; v: any }
-      >;
-      atNegativeOffsetHandler: FunctionReference<
         "query",
         "internal",
         { k1?: any; k2?: any; offset: number },
@@ -86,21 +74,8 @@ export declare const components: {
         { k1?: any; k2?: any; offset: number },
         { k: any; s: number; v: any }
       >;
-      atOffsetHandler: FunctionReference<
-        "query",
-        "internal",
-        { k1?: any; k2?: any; offset: number },
-        { k: any; s: number; v: any }
-      >;
       count: FunctionReference<"query", "internal", {}, any>;
-      countHandler: FunctionReference<"query", "internal", {}, any>;
       get: FunctionReference<
-        "query",
-        "internal",
-        { key: any },
-        null | { k: any; s: number; v: any }
-      >;
-      getHandler: FunctionReference<
         "query",
         "internal",
         { key: any },
@@ -112,19 +87,7 @@ export declare const components: {
         { k1?: any; key: any },
         number
       >;
-      offsetHandler: FunctionReference<
-        "query",
-        "internal",
-        { k1?: any; key: any },
-        number
-      >;
       offsetUntil: FunctionReference<
-        "query",
-        "internal",
-        { k2?: any; key: any },
-        number
-      >;
-      offsetUntilHandler: FunctionReference<
         "query",
         "internal",
         { k2?: any; key: any },
@@ -146,26 +109,8 @@ export declare const components: {
           page: Array<{ k: any; s: number; v: any }>;
         }
       >;
-      paginateHandler: FunctionReference<
-        "query",
-        "internal",
-        {
-          cursor?: string;
-          k1?: any;
-          k2?: any;
-          limit: number;
-          order: "asc" | "desc";
-        },
-        {
-          cursor: string;
-          isDone: boolean;
-          page: Array<{ k: any; s: number; v: any }>;
-        }
-      >;
       sum: FunctionReference<"query", "internal", {}, number>;
-      sumHandler: FunctionReference<"query", "internal", {}, number>;
       validate: FunctionReference<"query", "internal", {}, any>;
-      validateTree: FunctionReference<"query", "internal", {}, any>;
     };
     inspect: {
       display: FunctionReference<"query", "internal", {}, any>;
