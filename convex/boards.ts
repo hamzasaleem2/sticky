@@ -1,23 +1,23 @@
 import { paginationOptsValidator } from "convex/server";
-import { internalMutation as rawInternalMutation, mutation as rawMutation, query } from "./_generated/server";
+import { internalMutation as rawInternalMutation, mutation as rawMutation, query, MutationCtx } from "./_generated/server";
 import { v } from "convex/values";
 import { TableAggregate } from "@convex-dev/aggregate";
 import { DataModel } from "./_generated/dataModel";
 import { components } from "./_generated/api";
 import { Triggers } from "convex-helpers/server/triggers";
-import { customMutation } from "convex-helpers/server/customFunctions";
+import { customMutation,customCtx } from "convex-helpers/server/customFunctions";
 
 const aggregateBoardsByUser = new TableAggregate<[string, boolean], DataModel, "boards">(
   components.aggregateBoardsByUser,
   (doc) => [doc.ownerId, doc.inTrash],
 );
 
-const triggers = new Triggers<DataModel>();
+const triggers = new Triggers<DataModel,MutationCtx>();
 
 triggers.register("boards", aggregateBoardsByUser.trigger());
 
-const mutation = customMutation(rawMutation, triggers.customFunctionWrapper());
-const internalMutation = customMutation(rawInternalMutation, triggers.customFunctionWrapper());
+const mutation = customMutation(rawMutation, customCtx(triggers.wrapDB));
+const internalMutation = customMutation(rawInternalMutation, customCtx(triggers.wrapDB));
 
 export const backfillAggregates = internalMutation({
   handler: async (ctx) => {
