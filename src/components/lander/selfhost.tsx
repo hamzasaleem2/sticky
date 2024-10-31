@@ -1,117 +1,85 @@
 import React from 'react';
-import { Server, Lock, Zap, Paintbrush, Skull } from 'lucide-react';
+import { Skull, GitFork, Lock, Server } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useHalloween } from '../../providers/halloween-provider';
 
 const SelfHostSection: React.FC = () => {
   const { isHalloweenMode } = useHalloween();
 
-  const features = isHalloweenMode ? [
-    {
-      icon: <Skull className="h-8 w-8 text-halloween-orange" />,
-      title: "Dark Control",
-      description: "Your haunted infrastructure, your cursed domain."
-    },
-    {
-      icon: <Lock className="h-8 w-8 text-halloween-orange" />,
-      title: "Spectral Privacy",
-      description: "Keep your spirits close and secured."
-    },
-    {
-      icon: <Zap className="h-8 w-8 text-halloween-orange" />,
-      title: "Cursed Integrations",
-      description: "Seamlessly blend with your dark rituals."
-    },
-    {
-      icon: <Paintbrush className="h-8 w-8 text-halloween-orange" />,
-      title: "Haunted Experience",
-      description: "Customize to match your coven's essence."
-    }
-  ] : [
-    {
-      icon: <Server className="h-8 w-8 text-main" />,
-      title: "Full Control",
-      description: "Your infrastructure, your way."
-    },
-    {
-      icon: <Lock className="h-8 w-8 text-main" />,
-      title: "Enhanced Privacy",
-      description: "Keep your data close and secure.",
-    },
-    {
-      icon: <Zap className="h-8 w-8 text-main" />,
-      title: "Custom Integrations",
-      description: "Seamlessly fit into your workflow.",
-    },
-    {
-      icon: <Paintbrush className="h-8 w-8 text-main" />,
-      title: "Tailored Experience",
-      description: "Customize to match your brand.",
-    }
-  ];
-
   return (
-    <section className={`px-4 py-16 ${isHalloweenMode
-      ? 'bg-gradient-to-b from-halloween-black to-halloween-purple/30'
-      : 'bg-gradient-to-b from-purple-50 to-pink-50 dark:from-gray-900 dark:to-purple-900'
+    <section className={`px-4 py-2 ${isHalloweenMode
+      ? 'bg-gradient-to-b from-halloween-black/50 to-halloween-purple/20'
+      : 'bg-gradient-to-b from-purple-50/50 to-pink-50/50 dark:from-gray-900/50 dark:to-purple-900/50'
       }`}>
-      <div className="max-w-6xl mx-auto text-center">
-        <h2 className={`text-4xl sm:text-5xl font-bold mb-8 ${isHalloweenMode ? 'text-halloween-orange' : 'text-text dark:text-text-dark'
+      <div className="max-w-3xl mx-auto">
+        <div className={`flex items-center justify-between p-2 border rounded-lg ${isHalloweenMode
+          ? 'bg-halloween-black/50 border-halloween-orange/50'
+          : 'bg-white dark:bg-secondaryBlack border-border dark:border-darkBorder'
           }`}>
-          {isHalloweenMode ? 'Summon Your Own Instance' : 'Self-Host Sticky'}
-        </h2>
-        <p className={`text-xl mb-12 max-w-3xl mx-auto ${isHalloweenMode ? 'text-halloween-ghost' : 'text-text dark:text-text-dark'
-          }`}>
-          {isHalloweenMode
-            ? 'Your dark magic, your ancient rules. Deploy Sticky in your own haunted realm.'
-            : 'Your data, your rules. Deploy Sticky on your own terms.'}
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {features.map((feature, index) => (
-            <FeatureCard
-              key={index}
-              icon={feature.icon}
-              title={feature.title}
-              description={feature.description}
-              isHalloweenMode={isHalloweenMode}
-            />
-          ))}
+          <div className="flex items-center gap-4">
+            <div className={`p-1.5 rounded-md ${isHalloweenMode
+              ? 'bg-halloween-orange/10'
+              : 'bg-purple-50 dark:bg-gray-800'
+              }`}>
+              {isHalloweenMode
+                ? <Skull className="h-4 w-4 text-halloween-orange" />
+                : <GitFork className="h-4 w-4 text-main" />
+              }
+            </div>
+            <div className="flex flex-col items-start">
+              <h3 className={`text-sm font-medium ${isHalloweenMode
+                ? 'text-halloween-orange'
+                : 'text-text dark:text-text-dark'
+                }`}>
+                {isHalloweenMode ? 'Summon Your Instance' : 'Self-Host Sticky'}
+              </h3>
+              <p className={`text-xs ${isHalloweenMode
+                ? 'text-halloween-ghost'
+                : 'text-gray-500 dark:text-gray-400'
+                }`}>
+                {isHalloweenMode
+                  ? 'Deploy in your haunted realm'
+                  : 'Deploy on your infrastructure'}
+              </p>
+              <div className="flex gap-3 mt-1">
+                <span className={`flex items-center gap-1 text-xs ${isHalloweenMode
+                    ? 'text-halloween-ghost/80'
+                    : 'text-gray-400 dark:text-gray-500'
+                  }`}>
+                  <Lock className="h-3 w-3" />
+                  {isHalloweenMode ? 'Dark Security' : 'Full Control'}
+                </span>
+                <span className={`flex items-center gap-1 text-xs ${isHalloweenMode
+                  ? 'text-halloween-ghost/80'
+                  : 'text-gray-400 dark:text-gray-500'
+                  }`}>
+                  <Server className="h-3 w-3" />
+                  {isHalloweenMode ? 'Cursed Stack' : 'React + Convex.dev'}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col items-end gap-2">
+            <Button
+              onClick={() => window.open('https://github.com/hamzasaleem2/sticky', '_blank')}
+              className={`text-xs px-3 py-1 ${isHalloweenMode
+                ? 'bg-halloween-orange hover:bg-halloween-purple text-white'
+                : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+                }`}
+            >
+              {isHalloweenMode ? 'Conjure' : 'Deploy'}
+            </Button>
+            <span className={`text-[10px] ${isHalloweenMode
+              ? 'text-halloween-ghost/60'
+              : 'text-gray-400 dark:text-gray-500'
+              }`}>
+              {isHalloweenMode ? 'MIT Licensed Curse' : 'MIT Licensed'}
+            </span>
+          </div>
         </div>
-        <Button
-          onClick={() => window.open('https://github.com/hamzasaleem2/sticky', '_blank')}
-          className={`inline-flex items-center text-lg px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 ${isHalloweenMode
-            ? 'bg-halloween-orange hover:bg-halloween-purple text-white'
-            : ''
-            }`}
-        >
-          {isHalloweenMode ? (
-            <Skull className="mr-2 h-5 w-5" />
-          ) : (
-            <Server className="mr-2 h-5 w-5" />
-          )}
-          {isHalloweenMode ? 'Conjure Your Instance' : 'Explore Self-Hosting'}
-        </Button>
       </div>
     </section>
   );
 };
-
-const FeatureCard: React.FC<{
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  isHalloweenMode: boolean;
-}> = ({ icon, title, description, isHalloweenMode }) => (
-  <div className={`${isHalloweenMode
-    ? 'bg-halloween-black/50 border-halloween-orange/50 hover:border-halloween-orange spooky-hover'
-    : 'bg-white dark:bg-secondaryBlack border-border dark:border-darkBorder'
-    } border-2 rounded-base p-6 shadow-light dark:shadow-dark hover:translate-x-reverseBoxShadowX hover:translate-y-reverseBoxShadowY hover:shadow-none transition-all duration-300`}>
-    <div className="flex justify-center mb-4">{icon}</div>
-    <h3 className={`text-xl font-heading mb-2 ${isHalloweenMode ? 'text-halloween-ghost' : 'text-text dark:text-text-dark'
-      }`}>{title}</h3>
-    <p className={`${isHalloweenMode ? 'text-halloween-ghost/80' : 'text-text dark:text-text-dark'
-      } font-base`}>{description}</p>
-  </div>
-);
 
 export default SelfHostSection;
