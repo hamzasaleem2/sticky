@@ -8,6 +8,8 @@ import { ClerkProvider, useAuth } from "@clerk/clerk-react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { PostHogProvider } from 'posthog-js/react'
 import { Toaster } from "./providers/toaster";
+import { HalloweenProvider } from "./providers/halloween-provider";
+import HalloweenDecorations from "./components/halloween-decorations";
 
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
 
@@ -17,15 +19,15 @@ const options = {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <PostHogProvider
-      apiKey={import.meta.env.VITE_POSTHOG_KEY}
-      options={options}
-    >
+    <PostHogProvider apiKey={import.meta.env.VITE_POSTHOG_KEY} options={options}>
       <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
         <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <App />
-            <Toaster/>
+            <HalloweenProvider>
+              <HalloweenDecorations />
+              <App />
+              <Toaster/>
+            </HalloweenProvider>
           </ThemeProvider>
         </ConvexProviderWithClerk>
       </ClerkProvider>

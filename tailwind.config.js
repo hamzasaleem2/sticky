@@ -23,6 +23,28 @@ export default {
           DEFAULT: '#1f1f1f',
           dark: '#eeefe9',
         },
+        halloween: {
+          orange: '#FF6B1A',
+          purple: '#6B1AFF',
+          green: '#4CAF50',
+          black: '#1a1a1a',
+          ghost: 'rgba(255, 255, 255, 0.9)',
+        },
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+        spookyShake: {
+          '0%, 100%': { transform: 'rotate(0deg)' },
+          '25%': { transform: 'rotate(-5deg)' },
+          '75%': { transform: 'rotate(5deg)' },
+        },
+      },
+      animation: {
+        'float': 'float 6s ease-in-out infinite',
+        'spooky-shake': 'spookyShake 2s ease-in-out infinite',
       },
       borderRadius: {
         base: '20px'

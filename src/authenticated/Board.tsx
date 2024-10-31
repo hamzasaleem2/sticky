@@ -11,7 +11,6 @@ import Modal from '../components/ui/modal';
 import { Button } from '../components/ui/button';
 import UserStack from '../components/UserStack';
 import UserCursor, { COLORS } from '../components/UserCursor';
-import MobileBoardMessage from '../components/MobileMessage';
 import { Link } from 'react-router-dom';
 import ErrorMessage from '../components/ErrorMessage';
 import { HelpCircle } from 'lucide-react';
@@ -60,7 +59,6 @@ const Whiteboard: React.FC<WhiteboardProps> = ({ boardId }) => {
     const isShared = board?.isShared ?? false;
     const [isViewingSharedBoard, setIsViewingSharedBoard] = useState(false);
     const [sharedByUser, setSharedByUser] = useState<string | null>(null);
-    const [isMobile, setIsMobile] = useState(false);
     const inTrash = board?.inTrash;
     const [helpModalOpen, setHelpModalOpen] = useState(false);
 
@@ -116,31 +114,48 @@ const Whiteboard: React.FC<WhiteboardProps> = ({ boardId }) => {
     };
 
     useEffect(() => {
-        const checkScreenSize = () => setIsMobile(window.innerWidth < 768);
-        const handleMouseMove = (e: MouseEvent) => {
+        const handleMouseMove = (e: MouseEvent | TouchEvent) => {
             if (boardRef.current) {
                 const rect = boardRef.current.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
+                const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+                const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+                const x = clientX - rect.left;
+                const y = clientY - rect.top;
                 updateCursorPosition({ x, y });
             }
         };
 
-        checkScreenSize();
-        window.addEventListener('resize', checkScreenSize);
         boardRef.current?.addEventListener('mousemove', handleMouseMove);
+        boardRef.current?.addEventListener('touchmove', handleMouseMove);
 
         return () => {
-            window.removeEventListener('resize', checkScreenSize);
             boardRef.current?.removeEventListener('mousemove', handleMouseMove);
+            boardRef.current?.removeEventListener('touchmove', handleMouseMove);
         };
     }, [updateCursorPosition]);
 
-    const handleCreateNote = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleCreateNote = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
         if (boardRef.current && currentTool && !isDragging) {
             const rect = boardRef.current.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            let clientX, clientY;
+
+            if ('touches' in e) {
+                // Touch event
+                if (e.touches.length > 0) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                } else {
+                    return; // Exit if there are no touches
+                }
+            } else {
+                // Mouse event
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+
             if (x >= 0 && y >= 0 && x <= rect.width && y <= rect.height) {
                 createNote({
                     boardId: actualBoardId,
@@ -210,12 +225,8 @@ const Whiteboard: React.FC<WhiteboardProps> = ({ boardId }) => {
 
     const userColors = useStableColorAssignment(activeUsers);
 
-    if (isMobile) {
-        return <MobileBoardMessage />;
-    }
-
-    if(inTrash){
-        return <ErrorMessage message='Board is Trashed.'/>
+    if (inTrash) {
+        return <ErrorMessage message='Board is Trashed.' />
     }
 
     if (error) {
@@ -276,7 +287,7 @@ const Whiteboard: React.FC<WhiteboardProps> = ({ boardId }) => {
                             )}
                         </div>
                     )}
-                     <Button onClick={() => setHelpModalOpen(true)} className="bg-main hover:bg-mainAccent">
+                    <Button onClick={() => setHelpModalOpen(true)} className="bg-main hover:bg-mainAccent">
                         <HelpCircle className="w-5 h-5" />
                     </Button>
                     <UserButton />
@@ -285,6 +296,7 @@ const Whiteboard: React.FC<WhiteboardProps> = ({ boardId }) => {
                     ref={boardRef}
                     className="absolute inset-0"
                     onClick={handleCreateNote}
+                    onTouchStart={handleCreateNote}
                 >
                     {notes?.map((note) => (
                         <Note

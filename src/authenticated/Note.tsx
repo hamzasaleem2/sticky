@@ -27,12 +27,14 @@ const Note: React.FC<NoteProps> = ({ note, isSelected, onSelect, onUpdate, onDel
     const noteRef = useRef<HTMLDivElement>(null);
     const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleStart = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
         if (noteRef.current && !isResizing) {
             const rect = noteRef.current.getBoundingClientRect();
+            const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+            const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
             setDragOffset({
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top
+                x: clientX - rect.left,
+                y: clientY - rect.top
             });
             setIsNoteDragging(true);
             setIsDragging(true);
@@ -40,12 +42,14 @@ const Note: React.FC<NoteProps> = ({ note, isSelected, onSelect, onUpdate, onDel
         }
     };
 
-    const handleMouseMove = useCallback((e: MouseEvent) => {
+    const handleMove = useCallback((e: MouseEvent | TouchEvent) => {
         if (isDragging && noteRef.current) {
             const parentRect = noteRef.current.offsetParent?.getBoundingClientRect();
             if (parentRect) {
-                const newX = e.clientX - parentRect.left - dragOffset.x;
-                const newY = e.clientY - parentRect.top - dragOffset.y;
+                const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+                const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+                const newX = clientX - parentRect.left - dragOffset.x;
+                const newY = clientY - parentRect.top - dragOffset.y;
                 requestAnimationFrame(() => {
                     onUpdate(note._id, { position: { x: newX, y: newY } });
                 });
@@ -53,39 +57,35 @@ const Note: React.FC<NoteProps> = ({ note, isSelected, onSelect, onUpdate, onDel
         } else if (isResizing && noteRef.current) {
             const parentRect = noteRef.current.offsetParent?.getBoundingClientRect();
             if (parentRect) {
+                const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+                const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
                 let newWidth = note.size.width;
                 let newHeight = note.size.height;
                 let newX = note.position.x;
                 let newY = note.position.y;
-
+    
                 if (resizeHandle?.includes('e')) {
-                    newWidth = e.clientX - parentRect.left - note.position.x;
+                    newWidth = clientX - parentRect.left - note.position.x;
                 }
                 if (resizeHandle?.includes('s')) {
-                    newHeight = e.clientY - parentRect.top - note.position.y;
+                    newHeight = clientY - parentRect.top - note.position.y;
                 }
                 if (resizeHandle?.includes('w')) {
-                    newWidth = note.size.width + (note.position.x - (e.clientX - parentRect.left));
-                    newX = e.clientX - parentRect.left;
+                    newWidth = note.size.width + (note.position.x - (clientX - parentRect.left));
+                    newX = clientX - parentRect.left;
                 }
                 if (resizeHandle?.includes('n')) {
-                    newHeight = note.size.height + (note.position.y - (e.clientY - parentRect.top));
-                    newY = e.clientY - parentRect.top;
+                    newHeight = note.size.height + (note.position.y - (clientY - parentRect.top));
+                    newY = clientY - parentRect.top;
                 }
-
+    
                 onUpdate(note._id, {
                     size: { width: Math.max(newWidth, 100), height: Math.max(newHeight, 100) },
                     position: { x: newX, y: newY }
                 });
-                requestAnimationFrame(() => {
-                    onUpdate(note._id, {
-                        size: { width: Math.max(newWidth, 100), height: Math.max(newHeight, 100) },
-                        position: { x: newX, y: newY }
-                    });
-                });
             }
         }
-    }, [isDragging, isResizing, note._id, onUpdate, dragOffset]);
+    }, [isDragging, isResizing, note._id, onUpdate, dragOffset, resizeHandle, note.position.x, note.position.y, note.size.width, note.size.height]);
 
     const handleMouseUp = () => {
         setIsNoteDragging(false);
@@ -96,14 +96,18 @@ const Note: React.FC<NoteProps> = ({ note, isSelected, onSelect, onUpdate, onDel
 
     useEffect(() => {
         if (isDragging || isResizing) {
-            window.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mousemove', handleMove);
             window.addEventListener('mouseup', handleMouseUp);
+            window.addEventListener('touchmove', handleMove);
+            window.addEventListener('touchend', handleMouseUp);
         }
         return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mousemove', handleMove);
             window.removeEventListener('mouseup', handleMouseUp);
+            window.removeEventListener('touchmove', handleMove);
+            window.removeEventListener('touchend', handleMouseUp);
         };
-    }, [isDragging, isResizing, handleMouseMove]);
+    }, [isDragging, isResizing, handleMove]);
 
     const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         onUpdate(note._id, { content: e.target.value });
@@ -126,21 +130,23 @@ const Note: React.FC<NoteProps> = ({ note, isSelected, onSelect, onUpdate, onDel
     };
 
     return (
-        <div
-            ref={noteRef}
-            style={{
-                position: 'absolute',
-                left: note.position.x,
-                top: note.position.y,
-                width: note.size.width,
-                height: note.size.height,
-                backgroundColor: note.color,
-                zIndex: note.zIndex,
-            }}
-            className={`p-2 rounded-md shadow-lg transition-shadow duration-200 group ${isSelected ? ' shadow-xl' : ''}`}
-            onMouseDown={handleMouseDown}
-            onClick={(e) => e.stopPropagation()}
-        >
+            <div
+                ref={noteRef}
+                style={{
+                    position: 'absolute',
+                    left: note.position.x,
+                    top: note.position.y,
+                    width: note.size.width,
+                    height: note.size.height,
+                    backgroundColor: note.color,
+                    zIndex: note.zIndex,
+                    touchAction: 'none',
+                }}
+                className={`p-2 rounded-md shadow-lg transition-shadow duration-200 group ${isSelected ? ' shadow-xl' : ''}`}
+                onMouseDown={handleStart}
+                onTouchStart={handleStart}
+                onClick={(e) => e.stopPropagation()}
+            >
             <textarea
                 value={note.content}
                 onChange={handleTextareaChange}

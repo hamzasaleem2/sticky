@@ -1,3 +1,101 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .halloween-bg {
+        background: linear-gradient(to bottom, #1a1a1a, #2d1b3d);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+    }
+
+    .spooky-text {
+        text-shadow: 0 0 10px #FF6B1A, 0 0 20px #FF6B1A, 0 0 30px #FF6B1A;
+    }
+
+    .ghost-container {
+        position: fixed;
+        pointer-events: none;
+        z-index: 50;
+    }
+
+    .floating-ghost {
+        animation: float 6s ease-in-out infinite;
+        opacity: 0.6;
+    }
+
+    .halloween-glow {
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    .spooky-hover {
+        transition: all 0.3s ease;
+    }
+
+    .spooky-hover:hover {
+        transform: scale(1.05) rotate(2deg);
+        filter: brightness(1.2);
+    }
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px #FF6B1A, 0 0 10px #FF6B1A, 0 0 15px #FF6B1A;
+    }
+    to {
+        text-shadow: 0 0 10px #FF6B1A, 0 0 20px #FF6B1A, 0 0 30px #FF6B1A;
+    }
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px #FF6B1A, 0 0 10px #FF6B1A, 0 0 15px #FF6B1A;
+    }
+    to {
+        text-shadow: 0 0 10px #FF6B1A, 0 0 20px #FF6B1A, 0 0 30px #FF6B1A;
+    }
+}
+
+@keyframes spookyShake {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(2px, 2px) rotate(2deg); }
+    50% { transform: translate(0, -2px) rotate(-2deg); }
+    75% { transform: translate(-2px, 2px) rotate(2deg); }
+}
+
+@keyframes fog {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.halloween-card-hover {
+    transition: all 0.3s ease;
+}
+
+.halloween-card-hover:hover {
+    transform: translateY(-5px) rotate(2deg);
+    box-shadow: 0 10px 20px rgba(255, 107, 26, 0.2);
+}
+
+.spooky-text-shadow {
+    text-shadow: 2px 2px 4px rgba(255, 107, 26, 0.5);
+}
