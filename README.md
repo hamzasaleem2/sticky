@@ -30,6 +30,16 @@ Sticky is an open-source project. We believe in transparency and community-drive
 
 [https://github.com/hamzasaleem2/sticky](https://github.com/hamzasaleem2/sticky)
 
+## Star History
+
+<a href="https://star-history.com/#hamzasaleem2/sticky&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=hamzasaleem2/sticky&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=hamzasaleem2/sticky&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=hamzasaleem2/sticky&type=Date" />
+ </picture>
+</a>
+
 ## License
 
 Sticky is released under the MIT License. See the LICENSE file for more details.
