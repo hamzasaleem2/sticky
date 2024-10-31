@@ -13,6 +13,7 @@ import { formatLastModified } from '../libs/utils';
 import EmptyState from '../components/EmptyState';
 import { useHalloween } from '../providers/halloween-provider';
 import { LoadingIndicator } from './LoadingIndicator';
+import { HalloweenSwitcher } from '../components/halloween-switcher';
 
 const BoardsList: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -111,6 +112,7 @@ const BoardsList: React.FC = () => {
                                 </span>
                             </Button>
                             <UserButton />
+                            <HalloweenSwitcher/>
                         </div>
                     </div>
                 </div>
