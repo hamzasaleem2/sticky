@@ -10,22 +10,16 @@ const HalloweenContext = createContext<HalloweenContextType | undefined>(undefin
 export function HalloweenProvider({ children }: { children: React.ReactNode }) {
     const [isHalloweenMode, setIsHalloweenMode] = useState(() => {
         const savedMode = localStorage.getItem('halloweenMode');
-
-        const OCTOBER = 9;
-        const date = new Date();
-        const currentMonth = date.getMonth();
-        const dayOfMonth = date.getDate();
-
-        const isOctober = currentMonth === OCTOBER;
-        const isFirstWeek = dayOfMonth <= 7;
-        const shouldBeEnabled = isOctober && isFirstWeek;
-
+        
         if (savedMode !== null) {
             return savedMode === 'true';
         }
 
-        localStorage.setItem('halloweenMode', String(shouldBeEnabled));
-        return shouldBeEnabled;
+        const OCTOBER = 9;
+        const isOctober = new Date().getMonth() === OCTOBER;
+        
+        localStorage.setItem('halloweenMode', String(isOctober));
+        return isOctober;
     });
     const toggleHalloweenMode = () => {
         setIsHalloweenMode(prev => {
